@@ -87,17 +87,17 @@ public class Main {
         boolean contains(int[] coords) {
             int row = coords[0], col = coords[1];
             return row >= Math.min(start[0], end[0]) && row <= Math.max(start[0], end[0]) &&
-                   col >= Math.min(start[1], end[1]) && col <= Math.max(start[1], end[1]);
+                    col >= Math.min(start[1], end[1]) && col <= Math.max(start[1], end[1]);
         }
     }
 
     static void placeShips(Player player, Scanner scanner) {
         String[][] ships = {
-            {"Aircraft Carrier", "5"},
-            {"Battleship", "4"},
-            {"Submarine", "3"},
-            {"Cruiser", "3"},
-            {"Destroyer", "2"}
+                {"Aircraft Carrier", "5"},
+                {"Battleship", "4"},
+                {"Submarine", "3"},
+                {"Cruiser", "3"},
+                {"Destroyer", "2"}
         };
         for (String[] ship : ships) {
             while (true) {
@@ -138,7 +138,7 @@ public class Main {
             int r = coords[0], c = coords[1];
             if (defender.grid[r][c] == 'O') {
                 defender.grid[r][c] = 'X';
-                attacker.fogGrid[r][c] = 'X';
+                defender.fogGrid[r][c] = 'X';
 
                 boolean shipSunk = false;
                 for (Ship ship : defender.ships) {
@@ -150,17 +150,19 @@ public class Main {
                     }
                 }
 
-              if (shipSunk) {
-                  System.out.println("You sank a ship!");
-              } else {
-                  System.out.println("You hit a ship!");
-              }
-          } else if (defender.grid[r][c] == '~') {
-             System.out.println("You missed!");
-          } else {
-             System.out.println("You missed!");
-          }
-          break;
+                if (shipSunk) {
+                    System.out.println("You sank a ship!");
+                } else {
+                    System.out.println("You hit a ship!");
+                }
+            } else {
+                if (defender.grid[r][c] == '~') {
+                defender.grid[r][c] = 'M';
+            }
+                defender.fogGrid[r][c] = 'M';
+                System.out.println("You missed!");
+            }
+            break;
         }
     }
 
@@ -213,8 +215,10 @@ public class Main {
     }
 
     static void printBothFields(Player opponent, Player current) {
+        System.out.println("Opponent's field:");
         printField(opponent.fogGrid);
         System.out.println("---------------------");
+        System.out.println("Your field:");
         printField(current.grid);
     }
 
